@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Voitures Célèbres</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-color: #f0f0f0;
+    }
+    header {
+      background-color: #222;
+      color: white;
+      padding: 2rem;
+      text-align: center;
+    }
+    nav {
+      background-color: #333;
+      color: white;
+      padding: 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+    }
+    nav select, nav input, nav button {
+      padding: 0.5rem;
+      border-radius: 4px;
+      border: none;
+    }
+    main {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 1rem;
+    }
+    .voiture {
+      background-color: white;
+      margin-bottom: 1rem;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+    .voiture h2 {
+      margin-top: 0;
+    }
+    #ajout-form {
+      background: #fff;
+      padding: 1rem;
+      margin-top: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+    #ajout-form input, #ajout-form textarea {
+      width: 100%;
+      margin-bottom: 1rem;
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    @media (max-width: 600px) {
+      nav {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Voitures Célèbres</h1>
+    <p>Répertoire des voitures emblématiques, par marque et année</p>
+  </header>
+  <nav>
+    <label for="marque">Marque :</label>
+    <select id="marque">
+      <option value="">Toutes</option>
+      <option value="Ferrari">Ferrari</option>
+      <option value="Ford">Ford</option>
+      <option value="Porsche">Porsche</option>
+      <option value="Lamborghini">Lamborghini</option>
+      <option value="Peugeot">Peugeot</option>
+      <option value="Bugatti">Bugatti</option>
+      <option value="Renault">Renault</option>
+      <option value="Citroën">Citroën</option>
+      <option value="Toyota">Toyota</option>
+      <option value="Chevrolet">Chevrolet</option>
+    </select>
+
+    <label for="annee">Année :</label>
+    <input type="number" id="annee" placeholder="ex: 1987">
+
+    <button onclick="filtrerVoitures()">Rechercher</button>
+  </nav>
+  <main id="liste-voitures">
+    <div class="voiture" data-marque="Ford" data-annee="1965">
+      <h2>Ford Mustang (1965)</h2>
+      <p>Muscle car iconique, apparue dans de nombreux films.</p>
+    </div>
+    <div class="voiture" data-marque="Ferrari" data-annee="1987">
+      <h2>Ferrari F40 (1987)</h2>
+      <p>Dernière voiture approuvée par Enzo Ferrari, symbole de performance.</p>
+    </div>
+    <div class="voiture" data-marque="Porsche" data-annee="1964">
+      <h2>Porsche 911 (1964)</h2>
+      <p>Modèle culte de la marque allemande, toujours en production.</p>
+    </div>
+    <div class="voiture" data-marque="Lamborghini" data-annee="1974">
+      <h2>Lamborghini Countach (1974)</h2>
+      <p>Design révolutionnaire et moteur V12, voiture de rêve des années 80.</p>
+    </div>
+    <div class="voiture" data-marque="Peugeot" data-annee="1984">
+      <h2>Peugeot 205 GTI (1984)</h2>
+      <p>Légende des petites sportives françaises, adorée des passionnés.</p>
+    </div>
+    <div class="voiture" data-marque="Bugatti" data-annee="2005">
+      <h2>Bugatti Veyron (2005)</h2>
+      <p>Hypercar française ayant franchi la barre des 400 km/h.</p>
+    </div>
+    <div class="voiture" data-marque="Renault" data-annee="1992">
+      <h2>Renault Clio Williams (1992)</h2>
+      <p>Compacte sportive de collection, performante et agile.</p>
+    </div>
+    <div class="voiture" data-marque="Citroën" data-annee="1955">
+      <h2>Citroën DS (1955)</h2>
+      <p>Voiture avant-gardiste avec suspension hydraulique révolutionnaire.</p>
+    </div>
+    <div class="voiture" data-marque="Toyota" data-annee="1993">
+      <h2>Toyota Supra MK4 (1993)</h2>
+      <p>Symbole de la culture tuning japonaise, star de Fast & Furious.</p>
+    </div>
+    <div class="voiture" data-marque="Chevrolet" data-annee="1963">
+      <h2>Chevrolet Corvette Stingray (1963)</h2>
+      <p>Voiture américaine emblématique au design racé et performant.</p>
+    </div>
+
+    <form id="ajout-form" onsubmit="ajouterVoiture(event)">
+      <h3>Ajouter une voiture</h3>
+      <input type="text" id="nouvelle-marque" placeholder="Marque" required>
+      <input type="number" id="nouvelle-annee" placeholder="Année" required>
+      <input type="text" id="nouveau-modele" placeholder="Modèle (ex: Golf GTI)" required>
+      <textarea id="nouvelle-description" placeholder="Description" required></textarea>
+      <button type="submit">Ajouter</button>
+    </form>
+  </main>
+
+  <script>
+    function filtrerVoitures() {
+      const marque = document.getElementById("marque").value;
+      const annee = document.getElementById("annee").value;
+      const voitures = document.querySelectorAll(".voiture");
+
+      voitures.forEach(voiture => {
+        const vMarque = voiture.getAttribute("data-marque");
+        const vAnnee = voiture.getAttribute("data-annee");
+        const marqueOK = !marque || vMarque === marque;
+        const anneeOK = !annee || vAnnee === annee;
+
+        voiture.style.display = (marqueOK && anneeOK) ? "block" : "none";
+      });
+    }
+
+    function ajouterVoiture(event) {
+      event.preventDefault();
+
+      const marque = document.getElementById("nouvelle-marque").value;
+      const annee = document.getElementById("nouvelle-annee").value;
+      const modele = document.getElementById("nouveau-modele").value;
+      const description = document.getElementById("nouvelle-description").value;
+
+      const div = document.createElement("div");
+      div.className = "voiture";
+      div.setAttribute("data-marque", marque);
+      div.setAttribute("data-annee", annee);
+      div.innerHTML = `<h2>${marque} ${modele} (${annee})</h2><p>${description}</p>`;
+
+      document.getElementById("liste-voitures").appendChild(div);
+      document.getElementById("ajout-form").reset();
+    }
+  </script>
+</body>
+</html>
